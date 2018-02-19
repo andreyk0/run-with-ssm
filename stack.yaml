@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-10.5
+resolver: lts-9.21
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -37,6 +37,15 @@ resolver: lts-10.5
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - .
+- location:
+    git: https://github.com/brendanhay/amazonka.git
+    # (tag: 1.5.0)
+    commit: f92a6a8749e2908e1c7d6183f6e0afe3c9fad3df
+  subdirs:
+    - amazonka
+    - amazonka-ssm
+    - core
+  extra-dep: true
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

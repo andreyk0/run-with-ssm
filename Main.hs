@@ -8,8 +8,8 @@ import           Args
 import           Control.Lens
 import           Control.Monad
 import           Control.Monad.Trans.AWS
-import           Data.List (find)
 import qualified Data.List.NonEmpty as NEL
+import qualified Data.Map.Strict as Map
 import           Data.Maybe
 import           Data.Monoid
 import           Data.Text (Text)
@@ -17,7 +17,6 @@ import qualified Data.Text as T
 import           Network.AWS.SSM
 import           System.IO
 import           System.Posix
-
 
 data EnvVar = EnvVar
   { evName :: !Text
@@ -62,8 +61,8 @@ main = runWithArgs $ \args@Args{..} -> do
     unless (null invalidPs) $ error $ "Invalid parameters: " <> show invalidPs
     return $ res ^. grsParameters
 
-  let pnvs = (\p -> (fromMaybe "" (p ^. pName), fromMaybe "" (p ^. pValue))) <$> ssmPs
-      cmdenvs = (\EnvVar{..} -> (evName, maybe "" snd (find ((== evSSMName) . fst) pnvs))) <$> cmdEnv
+  let !pnvs = Map.fromList $ (\p -> (fromMaybe "" (p ^. pName), fromMaybe "" (p ^. pValue))) <$> ssmPs
+      cmdenvs = (\EnvVar{..} -> (evName, fromMaybe "" (Map.lookup evSSMName pnvs))) <$> cmdEnv
 
   forM_ cmdenvs $ \(n,v) -> setEnv (T.unpack n) (T.unpack v) True
   executeFile ((T.unpack . head) cmdExe) True (T.unpack <$> tail cmdExe) Nothing

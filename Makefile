@@ -14,7 +14,7 @@ install:
 
 bindist:
 	mkdir -p $(TARGET)
-	stack --local-bin-path $(TARGET) install run-with-ssm
+	stack --local-bin-path $(TARGET) install $(STACK_OPTS) run-with-ssm
 	upx --best $(EXE)
 	mv $(EXE) $(DIST_EXE)
 	gpg --output $(DIST_EXE_SIG) --detach-sign $(DIST_EXE)

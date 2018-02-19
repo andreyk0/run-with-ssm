@@ -20,4 +20,5 @@ Available options:
 See https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html for SSM docs.
 
   E.g. $ run-with-ssm --prefix /svc-foo/ -- BAR=bar BAZ=baz someprog -arg1 -arg2 ...
+  Runs 'someprog' with BAR environmental variable set to the SSM /svc-foo/bar and BAZ variable set to /svc-foo/baz
 ```
