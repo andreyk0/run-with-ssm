@@ -41,7 +41,7 @@ parseCmd Args{..} = do
   where parseEnvVar e = let evErr = Left $ "Unable to parse env var" <> e
                          in case T.splitOn "=" e
                               of [n, ssmn] -> do when (T.null n || T.null ssmn) evErr
-                                                 Right $ EnvVar n (maybe "" (<> ssmn) argsPrefix)
+                                                 Right $ EnvVar n (maybe ssmn (<> ssmn) argsPrefix)
                                  _         -> evErr
 
 
